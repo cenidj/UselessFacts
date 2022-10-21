@@ -3,21 +3,15 @@
 //  UselessFacts
 //
 //  Created by Cesario Nivar on 10/21/22.
-// Endopoint URL: https://uselessfacts.jsph.pl/random.json
 
 import SwiftUI
 
-struct Fact: Decodable {
-    let id: String
-    let text: String
-}
-
 struct ContentView: View {
-    @State private var randomFact = ""
+    @ObservedObject var factModel = FactViewModel()
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.blue, .blue.opacity(0.3)], startPoint: .top, endPoint: .bottomTrailing)
+            LinearGradient(colors: [.blue, .blue.opacity(0.4)], startPoint: .top, endPoint: .bottomTrailing)
                 .ignoresSafeArea()
             
             VStack(spacing: 20) {
@@ -33,17 +27,17 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                Text(randomFact)
+                Text(factModel.fact)
                     .padding()
                     .font(.title)
                     .frame(height: 300)
-                    .animation(.easeIn, value: randomFact)
+                    .animation(.easeIn, value: factModel.fact)
                 
                 Spacer()
                 
                 Button {
                     withAnimation {
-                        getFact()
+                        factModel.getFact()
                     }
                 } label: {
                     Text("Get random fact")
@@ -55,24 +49,7 @@ struct ContentView: View {
                 
                 Spacer()
             }
-            .onAppear {
-                getFact()
-            }
         }
-    }
-    
-    func getFact() {
-        URLSession.shared.dataTask(with: URL(string: "https://uselessfacts.jsph.pl/random.json")!) { data, _ , _ in
-            
-            guard let data = data else {
-                print("Data not exists...")
-                return
-            }
-            
-            let fact = try? JSONDecoder().decode(Fact.self, from: data)
-            randomFact = fact?.text ?? "Crocodiles and alligators are surprisingly fast on land.  Although they are rapid, they are not agile.  So, if being chased by one, run in a zigzag line to lose him or her."
-        }
-        .resume()
     }
 }
 
