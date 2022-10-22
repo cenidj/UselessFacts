@@ -24,8 +24,9 @@ final class FactViewModel: ObservableObject {
                 print("Data not exists...")
                 return
             }
-            
-            self.fact = try! JSONDecoder().decode(Fact.self, from: data).text 
+            DispatchQueue.main.async {
+                self.fact = try! JSONDecoder().decode(Fact.self, from: data).text                
+            }
         }
         .resume()
     }
