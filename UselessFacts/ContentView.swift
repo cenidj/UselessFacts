@@ -24,9 +24,6 @@ struct ContentView: View {
                     .font(.largeTitle).bold()
                     .foregroundColor(.white)
                 
-                
-                Spacer()
-                
                 Text(factModel.fact)
                     .padding()
                     .font(.title)
